@@ -99,7 +99,7 @@ module "backend_ec2" {
 module "default_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.13.1"
-  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-default-sg"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-${lookup(local.env, terraform.workspace)}-sg"
   vpc_id = module.vpc.vpc_id
   tags = {
     Terraform   = "true"
