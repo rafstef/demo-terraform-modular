@@ -67,7 +67,7 @@ module "frontend_ec2" {
   instance_type          = "t3.micro"
   key_name               = "cis-italy"
   monitoring             = true
-  vpc_security_group_ids = []
+  vpc_security_group_ids = [module.default_security_group.security_group_id]
   subnet_id              = module.vpc.public_subnets[count.index]
 
   tags = {
@@ -87,11 +87,16 @@ module "backend_ec2" {
   instance_type          = "t3.micro"
   key_name               = "cis-italy"
   monitoring             = true
-  vpc_security_group_ids = []
+  vpc_security_group_ids = [module.default_security_group.security_group_id]
   subnet_id              = module.vpc.private_subnets[count.index]
 
   tags = {
     Terraform   = "true"
     Environment = "${lookup(local.env, terraform.workspace)}"
   }
+}
+
+module "default_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.13.1"
 }
