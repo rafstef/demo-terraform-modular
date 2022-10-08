@@ -57,7 +57,7 @@ module "vpc" {
 }
 
 module "frontend_ec2" {
-  count = 2
+  count = "${lookup(local.backend_instance_count, terraform.workspace)}"
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 
@@ -77,7 +77,7 @@ module "frontend_ec2" {
 }
 
 module "backend_ec2" {
-  count = 2
+  count = "${lookup(local.backend_instance_count, terraform.workspace)}"
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 

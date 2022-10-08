@@ -11,6 +11,18 @@ locals {
         PREPROD = "modular"
         PROD = "modular"
     }
+    frontend_instance_count = {
+        DEV = "1"
+        BUGFIXING = "2"
+        PREPROD = "12"
+        PROD = "2"
+    }
+    backend_instance_count = {
+        DEV = "1"
+        BUGFIXING = "2"
+        PREPROD = "12"
+        PROD = "2"
+    }
     cidr = {
         DEV = "192.168.1.0/24"
         BUGFIXING = "192.168.2.0/24"
