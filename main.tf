@@ -99,4 +99,9 @@ module "backend_ec2" {
 module "default_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.13.1"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-terraform-ec2-default-sg"
+  tags = {
+    Terraform   = "true"
+    Environment = "${lookup(local.env, terraform.workspace)}"
+  }
 }
