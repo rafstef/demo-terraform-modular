@@ -81,7 +81,7 @@ module "backend_ec2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 
-  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-backend-${lookup(local.env, terraform.workspace)}-${count.index}"
 
   ami                    =  data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
