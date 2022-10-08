@@ -61,7 +61,7 @@ module "frontend_ec2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 
-  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-terraform-ec2-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
 
   ami                    =  data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
@@ -81,7 +81,7 @@ module "backend_ec2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 
-  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-terraform-ec2-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
 
   ami                    =  data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
@@ -99,7 +99,7 @@ module "backend_ec2" {
 module "default_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.13.1"
-  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-terraform-ec2-default-sg"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-default-sg"
   tags = {
     Terraform   = "true"
     Environment = "${lookup(local.env, terraform.workspace)}"
