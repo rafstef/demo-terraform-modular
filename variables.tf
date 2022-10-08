@@ -6,10 +6,10 @@ locals {
         PROD = "prod"
     }
     resource_prefix = {
-        DEV ="infra"
-        BUGFIXING = "infra"
-        PREPROD = "infra"
-        PROD = "infra"
+        DEV ="modular"
+        BUGFIXING = "modular"
+        PREPROD = "modular"
+        PROD = "modular"
     }
     cidr = {
         DEV = "192.168.1.0/24"
