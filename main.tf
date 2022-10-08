@@ -100,6 +100,7 @@ module "default_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.13.1"
   name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-default-sg"
+  vpc_id = module.vpc.default_vpc_id
   tags = {
     Terraform   = "true"
     Environment = "${lookup(local.env, terraform.workspace)}"
