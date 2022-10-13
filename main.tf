@@ -40,7 +40,7 @@ data "aws_ami" "ubuntu" {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   version = "3.14.2"
-  name = "modular-${lookup(local.env, terraform.workspace)}"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-${lookup(local.env, terraform.workspace)}"
   cidr = "${lookup(local.cidr, terraform.workspace)}"
 
   azs             = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
@@ -57,20 +57,52 @@ module "vpc" {
 }
 
 module "frontend_ec2" {
+  count = "${lookup(local.backend_instance_count, terraform.workspace)}"
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 4.1.1"
 
-  name = "modular-demo-terraform-ec2-frontend-${lookup(local.env, terraform.workspace)}"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-frontend-${lookup(local.env, terraform.workspace)}-${count.index}"
 
   ami                    =  data.aws_ami.ubuntu.id
-  instance_type          = "t3.medium"
+  instance_type          = "t3.micro"
   key_name               = "cis-italy"
   monitoring             = true
-  vpc_security_group_ids = []
-  subnet_id              = module.vpc.private_subnets[0]
+  vpc_security_group_ids = [module.default_security_group.security_group_id]
+  subnet_id              = module.vpc.public_subnets[count.index]
 
   tags = {
     Terraform   = "true"
-    Environment = "dev"
+    Environment = "${lookup(local.env, terraform.workspace)}"
+  }
+}
+
+module "backend_ec2" {
+  count = "${lookup(local.backend_instance_count, terraform.workspace)}"
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 4.1.1"
+
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-backend-${lookup(local.env, terraform.workspace)}-${count.index}"
+
+  ami                    =  data.aws_ami.ubuntu.id
+  instance_type          = "t3.micro"
+  key_name               = "cis-italy"
+  monitoring             = true
+  vpc_security_group_ids = [module.default_security_group.security_group_id]
+  subnet_id              = module.vpc.private_subnets[count.index]
+
+  tags = {
+    Terraform   = "true"
+    Environment = "${lookup(local.env, terraform.workspace)}"
+  }
+}
+
+module "default_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.13.1"
+  name = "${lookup(local.resource_prefix, terraform.workspace)}-demo-${lookup(local.env, terraform.workspace)}-sg"
+  vpc_id = module.vpc.vpc_id
+  tags = {
+    Terraform   = "true"
+    Environment = "${lookup(local.env, terraform.workspace)}"
   }
 }
