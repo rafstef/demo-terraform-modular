@@ -14,16 +14,6 @@ terraform {
     }
 }
 
-data "terraform_remote_state" "networking" {
-  workspace = "${terraform.workspace}"
-  backend = "s3"
-  config = {
-    bucket = "202210-demo-terraform"
-    key    = "demo-terraform-vpc"
-    region = "eu-central-1"
-  }
-}
-
 data "aws_ami" "ubuntu" {
   most_recent = "true"
   filter {
