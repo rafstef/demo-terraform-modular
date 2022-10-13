@@ -9,7 +9,7 @@ terraform {
     }
     backend "s3" {
         bucket = "202210-demo-terraform"
-        key    = "demo-terraform-ec2"
+        key    = "demo-terraform-modular"
         region = "eu-central-1"
     }
 }
